@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Art Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .module-card { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .module-card:hover { transform: translateY(-10px) scale(1.02); }
+        .glass-nav { backdrop-filter: blur(15px); background-color: rgba(15, 23, 42, 0.8); }
+        
+        .reveal-slow { 
+            opacity: 0; 
+            filter: blur(8px);
+            transform: translateY(10px);
+            transition: opacity 2s ease-out, filter 2s ease-out, transform 2s ease-out; 
+        }
+        .reveal-slow.active { 
+            opacity: 1; 
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        .hero-glow { position: absolute; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; z-index: 0; opacity: 0.2; animation: float 15s ease-in-out infinite alternate; }
+        @keyframes float { from { transform: translate(-10%, -10%); } to { transform: translate(10%, 10%); } }
+        
+        .star-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at top right, #1e293b 0%, #020617 100%); overflow: hidden; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: twinkle var(--duration) infinite ease-in-out, drift var(--float-duration) infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes drift { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-20px) translateX(10px); } }
+
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1);
+            pointer-events: none;
+            opacity: 0;
+        }
+        .meteor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(90deg, #fff, transparent);
+        }
+        @keyframes meteor-shoot {
+            0% { transform: rotate(315deg) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: rotate(315deg) translateX(-1000px); opacity: 0; }
+        }
+
+        @keyframes gravity-float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            33% { transform: translateY(-12px) translateX(5px) rotate(0.5deg); }
+            66% { transform: translateY(-6px) translateX(-4px) rotate(-0.5deg); }
+        }
+        .floating-pic { 
+            animation: gravity-float var(--float-time, 6s) infinite ease-in-out;
+        }
+
+        .gradient-text { @apply text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400; }
+    </style>
+</head>
+<body class="bg-[#020617] text-slate-200 overflow-x-hidden">
+  
+    <div class="star-bg" id="star-container"></div>
+    
+    <header class="relative min-h-screen flex flex-col justify-center items-center text-center overflow-hidden bg-transparent text-white">
+      
+        <div class="hero-glow bg-blue-600 top-[-10%] left-[-10%]"></div>
+        <div class="hero-glow bg-purple-500 bottom-[-10%] right-[-10%]"></div>
+        <div class="hero-glow bg-emerald-500/30 top-[20%] right-[10%] w-[30vw] h-[30vw]"></div>
+
+        <div class="container relative z-10 px-4">
+            <div id="hero-content" class="opacity-0 translate-y-10 transition-all duration-1000 ease-out">
+                <span class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-[0.3em] text-blue-400 uppercase border border-blue-400/30 rounded-full bg-blue-400/5 backdrop-blur-sm">
+                    BSIT | 2-J
+                </span>
+                <h1 class="text-5xl md:text-8xl font-black mb-2 tracking-tighter">
+                    BUSTO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">NATHANIEL JHANN</span>
+                </h1>
+                <h2 class="text-xl md:text-3xl font-light text-gray-400 mb-10 tracking-[0.2em] uppercase">
+                    GE ELEC 3: Reading Visual Art
+                </h2>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+        
+        <section id="artist-statement" class="mb-20 reveal-slow">
+            <h2 class="text-4xl font-black mb-6 border-l-4 border-blue-500 pl-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 uppercase tracking-tighter">Artist Statement</h2>
+            <div class="bg-slate-900/60 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-2xl">
+                <p class="leading-relaxed text-slate-300 text-lg">
+                    My artwork studies how urban decay and natural resilience themes interact with each other through human perception of time. I believe art should connect between human subconscious mind and physical world because it needs to express temporary feelings through permanent artistic works. I direct viewers to discover beauty within everyday objects by emphasizing how light interacts with aged surfaces. I use oil paint and found textiles in my work because I develop my art through intuitive gesture painting which I later refine to represent natural processes of growth and erosion. I want my audience to experience self-reflection through my work which provides them with an immersive journey that will transform their understanding of understanding things.
+                </p>
+            </div>
+        </section>
+
+        <section id="modules" class="mb-20">
+            <h2 class="text-4xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 uppercase tracking-tighter">Module Outputs</h2>
+            <div class="reveal-slow">
+                <div id="main-slideshow" class="max-w-2xl mx-auto aspect-square group overflow-hidden rounded-xl shadow-2xl bg-slate-800 floating-pic relative">
+                 
+                    <img id="slideshow-img" src="MOD1.jfif" alt="Module Artwork" 
+                         class="w-full h-full object-cover cursor-pointer module-trigger transition-all duration-700 ease-in-out"
+                         data-index="0"
+                         data-title="MODULE 1: DIGITAL VISUAL WORLD COLLAGE"
+                         data-desc="The digital collage I created as My Visual World demonstrates how personal identity and technological advances and imaginative thinking establish a connection between these two elements. The self-portrait serves as the main element of the artwork because it exists within a circular portal which connects to a wide range of digital symbols. Through my use of social media platforms which include Instagram and TikTok and Discord I examine how these platforms serve as our primary means to observe and engage with contemporary society. The platforms function as social media tools which form the essential structure of our current social environment.&#10;&#10;The composition extends beyond the virtual realm through its inclusion of celestial elements which feature rockets and UFOs and extraterrestrial objects that appear against a deep topographical background. The design elements symbolize human curiosity which extends indefinitely into outer space and encompasses all creative activities of human existence. The artwork employs a dynamic color scheme which combines vibrant neon colors with glowing circuitry lines to display the active energy that defines an era of complete digital connectivity. The artist proves his identity through different elements that exist in his personal ecosystem which shows his dedication to gaming and global communication and digital frontier exploration.">
+                    
+                    <div class="absolute inset-y-0 left-0 flex items-center p-4 z-20">
+                        <button id="slideshow-prev" class="bg-black/40 backdrop-blur-sm p-3 rounded-full hover:bg-blue-500/40 transition-all hover:scale-110 border border-white/10 text-white shadow-xl hidden">
+                            <svg class="w-8 h-8" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </button>
+                    </div>
+
+               
+                    <div class="absolute inset-y-0 right-0 flex items-center p-4 z-20">
+                        <button id="slideshow-next" class="bg-black/40 backdrop-blur-sm p-3 rounded-full hover:bg-blue-500/40 transition-all hover:scale-110 border border-white/10 text-white shadow-xl">
+                            <svg class="w-8 h-8" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-2 rounded-full text-xs font-bold border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        <span id="slideshow-counter">Slide 1 / 10</span> | Tap image for info
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="info-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden p-4 md:p-10">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" id="modal-overlay"></div>
+        <div class="relative bg-slate-900/95 border border-white/10 rounded-[2.5rem] w-full max-w-[95vw] h-full max-h-[92vh] shadow-2xl transform scale-95 opacity-0 transition-all duration-500 overflow-hidden flex flex-col md:flex-row" id="modal-content">
+            <button class="absolute top-6 right-6 z-50 text-slate-400 hover:text-white transition-all hover:rotate-90 bg-black/20 backdrop-blur-md p-2 rounded-full border border-white/10" id="modal-close">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <div class="flex-grow md:w-[75%] bg-black flex items-center justify-center p-2 min-h-0 overflow-hidden">
+               
+                <div id="multi-img-view" class="hidden w-full h-full flex flex-col gap-12 overflow-y-auto p-8 md:p-12 items-center scroll-smooth"></div>
+
+                <div id="single-img-view" class="w-full h-full flex items-center justify-center">
+                    <img id="modal-img" src="" alt="" class="w-full h-full object-contain">
+                </div>
+            </div>
+
+            <div class="w-full md:w-[25%] p-6 md:p-8 overflow-y-auto border-t md:border-t-0 md:border-l border-white/10 bg-slate-900/80 backdrop-blur-md max-h-[40%] md:max-h-full">
+                <h3 id="modal-title" class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 uppercase mb-4 tracking-tight"></h3>
+                <p id="modal-desc" class="text-slate-300 leading-relaxed text-base md:text-lg font-normal text-justify"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full-screen Thank You! section, initially hidden -->
+    <div id="full-screen-thank-you" class="fixed inset-0 bg-[#020617] z-[1000] flex flex-col items-center justify-center hidden p-4">
+        <button id="thank-you-back" class="absolute top-10 left-10 bg-black/40 backdrop-blur-sm p-4 rounded-full hover:bg-blue-500/40 transition-all hover:scale-110 border border-white/10 text-white shadow-xl">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <h2 class="text-5xl md:text-7xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 uppercase tracking-tighter mb-12">Thank You!</h2>
+        <div class="text-right w-full max-w-5xl px-4">
+            <p class="text-2xl md:text-3xl text-slate-400">Instructor: <span class="text-slate-100 font-bold">Princess Joanna Labaro</span></p>
+        </div>
+    </div>
+
+    <footer class="glass-nav border-t border-white/5 py-12 text-center text-slate-400 text-sm">
+        <div class="max-w-5xl mx-auto px-4">
+            <p class="tracking-widest uppercase mb-2">&copy; 2026 BUSTO, NATHANIEL JHANN G.</p>
+            <p class="font-light italic">Digital Art Portfolio</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+           
+            const heroContent = document.getElementById('hero-content');
+            heroContent.classList.replace('opacity-0', 'opacity-100');
+            heroContent.classList.replace('translate-y-10', 'translate-y-0');
+
+            const container = document.getElementById('star-container');
+            for(let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                star.style.setProperty('--float-duration', (Math.random() * 6 + 4) + 's');
+                container.appendChild(star);
+            }
+
+            function createMeteor() {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                meteor.style.left = Math.random() * 100 + '%';
+                meteor.style.top = Math.random() * 50 + '%';
+                meteor.style.animation = `meteor-shoot ${Math.random() * 2 + 1}s linear forwards`;
+                container.appendChild(meteor);
+                
+                setTimeout(() => meteor.remove(), 3000);
+            }
+            setInterval(createMeteor, 4000);
+            
+            const modulesData = [
+                {
+                    img: 'MOD1.jfif',
+                    title: 'MODULE 1: DIGITAL VISUAL WORLD COLLAGE',
+                    desc: 'The "My Visual World" digital collage shows how a person builds their identity through their everyday experiences in todays digital world. The central portrait displays social media icons which include Instagram and Facebook and TikTok and Discord as the main way people use online platforms to interact with each other. The outer space backdrop which includes a rocket and UFO and moon validates the theme of the "digital universe" because it creates an atmosphere of space exploration and shows the endless possibilities present on the internet. The collage uses personal images and circuit patterns and gaming symbols to show how people experience their digital existence as a vibrant interconnected world.'
+                },
+                {
+                    img: 'MOD2.jfif',
+                    title: 'MODULE 2: OBSERVATIONAL DRAWING(7 ELEMENTS)',
+                    desc: 'The drawing shows how all seven elements of art work together in a still-life display that uses common objects as its subject matter. The line work shows through the basic outlines and the structural edges of the book, which define all aspects of the two-dimensional objects. The artist shows form through tonal value, which he achieves by using soft charcoal gradients to create three-dimensional depth. The artist shows controlled space use through the overlapping elements of the vase and apple which exist behind the book, the combination creates a foreground and background effect, while the shaded areas create the actual texture of ceramic and fruit. The artwork uses only one color, but the pencils different strength creates effects that show all shades from light to dark throughout the piece, which maintains a balanced design that leads viewers to move their gaze from one side to another across the artwork.'
+                },
+                {
+                    img: 'MOD3.jfif',
+                    title: 'MODULE 3: ABSTRACT COMPOSITION',
+                    desc: 'The abstract work displays its vibrant creative energy through geometric abstract design which uses flat primary and secondary color planes to establish rhythmic patterns and balanced visual elements. The design requires different shape elements which include sharp triangular and square shapes together with soft semicircular and organic arch forms as the base for creating shallow spatial depth. The artist establishes visual focal points through high-contrast color blocks which include a bold red circle and deep blue arches that direct viewer attention from top to bottom throughout the page. The artwork reaches its dynamic energy through its elimination of all representational elements which creates an unbroken connection between form and color that explains the fundamental design principles of variety and unity through a modern collage-based visual style.'
+                },
+                {
+                    img: 'MOD4.png',
+                    title: 'MODULE 4: TRANSFORMATION SERIES(3 VERSION)',
+                    desc: 'This transformation series demonstrates how artists develop their creative work through three separate interpretations of an apple. The Representational stage requires artists to create realistic artworks through their use of accurate color and light and shadow techniques which enable them to create three-dimensional representations of actual fruit. The Abstract version begins to depart from reality, intensifying hues and distorting the form to emphasize the "essence" of the subject rather than its exact likeness. The Non-Objective stage completely departs from its original subject through its use of unpredictable lines and scribbles and stacked colors which display artwork through line and color and motion without showing any tangible object. The artist uses his work to study visual perception because he dismantles recognizable shapes to create multiple visual patterns that show different artistic levels of complexity.'
+                },
+                {
+                    img: 'MOD5.png',
+                    title: 'MODULE 5: FILIPINO-INSPIRED PATTERN DESIGN',
+                    desc: 'The design features a lively combination of traditional Filipino script and geometric designs which base their patterns on the pre-colonial Baybayin writing system. The layout features the names "Nathaniel," "Jhann," and "Busto" translated into Baybayin characters, which are neatly arranged within a layered rectangular frame. The main text area displays a bold fuchsia border which uses repeating diamond patterns that represent "tinatala" as design elements that reflect indigenous weaving customs from Ilocano and Kalinga textile traditions. The combination of natural curves from ancient writing systems with precise geometric patterns creates a contemporary artistic expression that honors Filipino cultural heritage and national identity.'
+                },
+                {
+                    img: 'MOD6-7.png',
+                    title: 'MODULE 6-7: DRAWING OR PAINTING ARTWORK',
+                    desc: 'The artist created this personalized cultural tribute through which he combined traditional Baybayin script with contemporary graphic design components. The indigenous Filipino writing system contains the name "Nathaniel Jhann Busto" which functions as a heritage display through its dual role as a linguistic and visual centerpiece. The main text of the document exists inside an animated hand-painted geometric frame which displays repeating diamond patterns and "eye" designs that create matching visual elements throughout the artwork. The calligraphy uses bold black ink which produces strong visual separation from the light background while the borders pink and purple colors introduce modern design elements that make the artwork function as both a nameplate and a study of cultural identity.'
+                },
+                {
+                    img: 'MOD8.png',
+                    title: 'MODULE 8: DIGITAL POSTER',
+                    desc: 'The artist demonstrates his proficiency in using the Cross Hatching Technique through this artwork which employs intersecting parallel lines to create a vibrant still-life depiction of geometric shapes. The artist uses different line density patterns to create a complete value spectrum which includes bright highlights and deep shadows that define the three-dimensional shape of the cylinder cone sphere and cube. The artist creates three-dimensional shapes through meticulous layering which also produces tactile elements and atmospheric depth through the use of strong shadows. The composition functions as an advanced study of light and shadow which shows how basic lines can create detailed three-dimensional space in a single-color design.'
+                },
+                {
+                    img: 'MOD9.png',
+                    images: ['MOD9.png', '2.png', '3.png'],
+                    title: 'MODULE 9: PHOTO NARRATIVE SERIES (3 PHOTOS)',
+                    desc: 'Through its three-part photo sequence, the project shows a person moving through a peaceful country area, starting from wide shots and ending with close-up scenes of inner thought. The first image establishes the setting, showcasing a vast, sun-drenched field bordered by distant hills, emphasizing the scale and tranquility of the environment. The narrative then shifts to a stunning atmospheric transition with a sunset shot, where the vibrant oranges and deep blues of the clouds introduce a sense of passing time and emotional warmth. The final part of the series shows a personal bond, which features a person sitting on grass who watches the same wide field from the opening; this last image brings viewers to the subjects viewpoint, which changes an ordinary landscape into a special area for personal time and nature connection.'
+                },
+                {
+                    img: 'MOD10.png',
+                    title: 'MODULE 10: INFOGRAPHIC (IT TOPIC)',
+                    desc: 'The IT career landscape infographic presents a complete visual pathway which guides aspiring tech professionals through its four main quadrants. The initial section of the document establishes essential job functions through Software Development and Cybersecurity, which it uses to demonstrate how professionals advance from basic support roles to executive positions such as Chief Technology Officer. The bottom half of the design uses data visualization to rank critical skills, highlighting problem-solving and coding as top priorities, while concluding with a motivational summary of industry benefits like high demand and job flexibility. The infographic presents an organized career path which shows complex career paths through its clean teal design and user-friendly icon system, making it suitable for general public comprehension.'
+                },
+                {
+                    img: 'MOD11.jfif',
+                    title: 'MODULE 11: MEME SERIES CREATION',
+                    desc: 'The creation of this meme series is rooted in the "Two-Panel Contrast" format, which pairs opposing emotional states to highlight a relatable irony. The creator uses Shreks highly expressive face in this version to display how the brain turns against him during moments of extreme stress. The first panel uses a "buffering" icon, which functions as a digital symbol for technical failure, to show how test anxiety causes cognitive freeze, and the second panel shows a person with a smug, knowing smirk to demonstrate how he mocks people after they have overcome their stress. The series has become an essential part of student internet culture because it shows a common psychological pattern through early 2000s nostalgic elements, which makes "exam amnesia" frustration both funny and easy to share.'
+                }
+            ];
+
+            let currentSlideIdx = 0;
+            const slideshowImg = document.getElementById('slideshow-img');
+            const slideshowCounter = document.getElementById('slideshow-counter');
+            const btnMainNext = document.getElementById('slideshow-next');
+            const btnMainPrev = document.getElementById('slideshow-prev');
+
+            // New elements for full-screen Thank You
+            const fullScreenThankYou = document.getElementById('full-screen-thank-you');
+            const mainSlideshow = document.getElementById('main-slideshow'); // The div containing the slideshow
+            const mainContent = document.querySelector('main'); // The main content area
+            const regularFooter = document.querySelector('footer'); // The regular footer
+
+            const showThankYouScreen = () => {
+                if (mainContent) mainContent.classList.add('hidden');
+                if (mainSlideshow) mainSlideshow.classList.add('hidden');
+                if (regularFooter) regularFooter.classList.add('hidden');
+                fullScreenThankYou.classList.remove('hidden');
+                window.scrollTo(0, 0); // Scroll to the top of the page
+            };
+
+            const btnThankYouBack = document.getElementById('thank-you-back');
+            btnThankYouBack.addEventListener('click', () => {
+                fullScreenThankYou.classList.add('hidden');
+                if (mainContent) mainContent.classList.remove('hidden');
+                if (mainSlideshow) mainSlideshow.classList.remove('hidden');
+                if (regularFooter) regularFooter.classList.remove('hidden');
+                currentSlideIdx = modulesData.length - 1; // Return to MOD11
+                updateSlideshow(currentSlideIdx);
+            });
+
+            const updateSlideshow = (idx) => {
+                slideshowImg.style.opacity = '0';
+                setTimeout(() => {
+                    if (idx === 0) btnMainPrev.classList.add('hidden');
+                    else btnMainPrev.classList.remove('hidden');
+
+                    const data = modulesData[idx];
+                    slideshowImg.src = data.img;
+                    slideshowImg.dataset.title = data.title;
+                    slideshowImg.dataset.desc = data.desc;
+                    slideshowImg.dataset.index = idx;
+                    slideshowCounter.textContent = `Slide ${idx + 1} / ${modulesData.length}`;
+                    slideshowImg.style.opacity = '1';
+                }, 400);
+            };
+
+            btnMainNext.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentSlideIdx === modulesData.length - 1) {
+                    showThankYouScreen();
+                } else {
+                    currentSlideIdx = (currentSlideIdx + 1) % modulesData.length;
+                    updateSlideshow(currentSlideIdx);
+                }
+            });
+
+            btnMainPrev.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentSlideIdx = (currentSlideIdx - 1 + modulesData.length) % modulesData.length;
+                updateSlideshow(currentSlideIdx);
+            });
+
+
+            const modal = document.getElementById('info-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDesc = document.getElementById('modal-desc');
+            const modalImg = document.getElementById('modal-img');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalClose = document.getElementById('modal-close');
+            const singleImgView = document.getElementById('single-img-view');
+            const multiImgView = document.getElementById('multi-img-view');
+
+            const openModal = (title, desc, imgSrc, images = null) => {
+                modalTitle.textContent = title;
+                modalDesc.textContent = desc;
+
+                if (images && images.length > 1) {
+                    singleImgView.classList.add('hidden');
+                    multiImgView.classList.remove('hidden');
+                    multiImgView.innerHTML = '';
+                    images.forEach(src => {
+                        const container = document.createElement('div');
+                        container.className = 'w-full flex-shrink-0 flex justify-center';
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.className = 'max-w-full h-auto max-h-[85vh] object-contain transition-transform duration-500';
+                        container.appendChild(img);
+                        multiImgView.appendChild(container);
+                    });
+                } else {
+                    multiImgView.classList.add('hidden');
+                    singleImgView.classList.remove('hidden');
+                    modalImg.src = imgSrc;
+                }
+
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.replace('scale-90', 'scale-100');
+                    modalContent.classList.replace('opacity-0', 'opacity-100');
+                }, 10);
+            };
+
+            const closeModal = () => {
+                modalContent.classList.replace('scale-100', 'scale-90');
+                modalContent.classList.replace('opacity-100', 'opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            };
+
+            modalOverlay.addEventListener('click', closeModal);
+            modalClose.addEventListener('click', closeModal);
+
+            document.querySelectorAll('.module-trigger').forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const idx = parseInt(trigger.dataset.index) || 0;
+                    const data = modulesData[idx];
+                    openModal(data.title, data.desc, data.img, data.images);
+                });
+            });
+
+            document.querySelectorAll('.floating-pic').forEach(el => {
+                const duration = Math.random() * 3 + 5;
+                const delay = Math.random() * 5;
+                el.style.setProperty('--float-time', duration + 's');
+                el.style.animationDelay = delay + 's';
+            });
+            
+            const observerOptions = {
+                threshold: 0.05,
+                rootMargin: "0px 0px -100px 0px"
+            };
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-slow').forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
